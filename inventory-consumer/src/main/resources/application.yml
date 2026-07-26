@@ -1,0 +1,35 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: inventory-consumer
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orders_db
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+  cloud:
+    aws:
+      sqs:
+        endpoint: ${AWS_SQS_ENDPOINT:http://localhost:4566}
+      region:
+        static: ${AWS_REGION:ap-south-1}
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID:test}
+        secret-key: ${AWS_SECRET_ACCESS_KEY:test}
+
+app:
+  sqs:
+    inventory-queue-name: ${INVENTORY_QUEUE_NAME:inventory-queue}
+
+logging:
+  level:
+    com.shanmugapriya.inventoryconsumer: DEBUG

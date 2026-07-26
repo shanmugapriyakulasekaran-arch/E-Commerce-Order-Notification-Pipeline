@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: order-pipeline-postgres
+    environment:
+      POSTGRES_DB: orders_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    command: >
+      postgres
+      -c timezone=UTC
+      -c log_timezone=UTC
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  localstack:
+    image: localstack/localstack:3
+    container_name: order-pipeline-localstack
+    environment:
+      - SERVICES=sns,sqs
+      - DEFAULT_REGION=ap-south-1
+      - DEBUG=0
+    ports:
+      - "4566:4566"
+    volumes:
+      - "./infra/localstack-init.sh:/etc/localstack/init/ready.d/init.sh"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+volumes:
+  pgdata:

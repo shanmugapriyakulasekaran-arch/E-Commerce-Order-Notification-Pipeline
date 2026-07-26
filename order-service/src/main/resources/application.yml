@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orders_db
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  cloud:
+    aws:
+      sns:
+        endpoint: ${AWS_SNS_ENDPOINT:http://localhost:4566}   # LocalStack by default
+      region:
+        static: ${AWS_REGION:ap-south-1}
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID:test}
+        secret-key: ${AWS_SECRET_ACCESS_KEY:test}
+
+app:
+  sns:
+    order-events-topic-arn: ${ORDER_EVENTS_TOPIC_ARN:arn:aws:sns:ap-south-1:000000000000:order-events}
+
+logging:
+  level:
+    com.shanmugapriya.orderservice: DEBUG

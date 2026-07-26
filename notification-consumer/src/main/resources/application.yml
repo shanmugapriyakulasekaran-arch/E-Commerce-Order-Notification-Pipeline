@@ -1,0 +1,26 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: notification-consumer
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  cloud:
+    aws:
+      sqs:
+        endpoint: ${AWS_SQS_ENDPOINT:http://localhost:4566}
+      region:
+        static: ${AWS_REGION:ap-south-1}
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID:test}
+        secret-key: ${AWS_SECRET_ACCESS_KEY:test}
+
+app:
+  sqs:
+    notification-queue-name: ${NOTIFICATION_QUEUE_NAME:notification-queue}
+
+logging:
+  level:
+    com.shanmugapriya.notificationconsumer: DEBUG
